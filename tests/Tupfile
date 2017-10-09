@@ -1,0 +1,4 @@
+include_rules
+
+: foreach *.cpp |> !cc |>
+: foreach *.o | $(LOCAL_LIBS) |> !ld |> %B

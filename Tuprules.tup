@@ -1,0 +1,26 @@
+PROJECT = dreport
+
+CC = clang++
+
+# include_directories
+INCLUDE_DIRS += -I$(TUP_CWD)/src
+#INCLUDE_DIRS += -I$(TUP_CWD)/lib
+INCLUDE_DIRS += -I/media/windows/Users/HP/Desktop/programming/cpp/git/Catch/include
+
+CFLAGS += -std=c++14 
+CFLAGS += -Wall
+
+#CFLAGS += -Os
+
+#LIB_DIRS += -L$(TUP_CWD)/src/parsers
+
+LOCAL_LIBS += $(TUP_CWD)/src/parsers/lib$(PROJECT)_parsers.a
+
+# dependencies_libraries
+LIBS += -lboost_filesystem
+LIBS += -lboost_system
+#LIBS += -lparsers
+
+!cc = |> ^ CC %f^ $(CC) $(CFLAGS) $(INCLUDE_DIRS) -c %f -o %o |> %B.o
+!ar = |> ^ AR %f^ ar crc %o %f |> lib$(PROJECT)_%d.a
+!ld = |> ^ LINK %f^ $(CC) $(LDFLAGS) $(LIB_DIRS) %f $(LOCAL_LIBS) -o %o $(LIBS) |> $(PROJECT)
