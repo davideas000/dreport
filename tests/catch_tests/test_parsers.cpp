@@ -9,15 +9,20 @@ TEST_CASE("parsing cpp files") {
     string extras_path = "files/file_1.cpp";
 
     CppLexer lex{extras_path};
-    unique_ptr<Token> tk = lex.next_token();
-    while (tk->tag() != Tag::T_EOF) {
-        tk = lex.next_token();
+
+    SECTION("get metrics") {
+
+        unique_ptr<Token> tk = lex.next_token();
+        while (tk->tag() != Tag::T_EOF) {
+            tk = lex.next_token();
+        }
+
+        lex.next_token();
+
+        REQUIRE(lex.lineno() == 27);
+        REQUIRE(lex.empty_lines() == 5);
+        REQUIRE(lex.comment_lines() == 8);
+
     }
-
-    lex.next_token();
-
-    REQUIRE(lex.lineno() == 27);
-    REQUIRE(lex.empty_lines() == 5);
-    REQUIRE(lex.comment_lines() == 8);
 
 }
