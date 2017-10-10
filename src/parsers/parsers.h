@@ -12,8 +12,8 @@ namespace dreport {
     class Token {
         
         friend std::ostream& operator<<(std::ostream& os, Token* tk);
-        //friend std::ostream& operator<<(std::ostream& os, const Token* tk);
-        //friend std::ostream& operator<<(std::ostream& os, const Token& tk);
+        //friend std::ostream& operator<<(std::ostream& os, const Token* tk); // ====
+        //friend std::ostream& operator<<(std::ostream& os, const Token& tk); // ====
         public:
             explicit Token(Tag tag);
             Token(const Token& tk) = delete;

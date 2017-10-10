@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <cassert>// ====
 
 ///////////////////////////////////////
 ////////// Token class ////////////////
@@ -87,28 +88,77 @@ dreport::CppLexer:: ~CppLexer() {}
 
 std::unique_ptr<dreport::Token> dreport::CppLexer::next_token() {
 
-    static bool em = true;
+    while (true) {
+        static bool em = true;
 
-    if (isspace(c_peek)) {
+        if (isspace(c_peek)) {
 
-        while (isspace(c_peek)) {
-            if (c_peek == '\n') {
-                ++c_lineno;
-                if (em) {
-                    ++c_empty_lines;
-                    std::cout << "empty line at " << c_lineno << std::endl; // ====
+            while (isspace(c_peek)) {
+                if (c_peek == '\n') {
+                    ++c_lineno;
+                    if (em) {
+                        ++c_empty_lines;
+                        std::cout << "empty line at " << c_lineno << std::endl; // ====
+                    }
+                    em = true;
                 }
-                em = true;
+                next_ch();
             }
-            next_ch();
+
         }
 
+        em = false;
+
+        if (c_peek == '/') {
+            next_ch();
+            if (c_peek == '*') {
+                while (true) {
+
+                    if (c_peek == EOF) {
+                        std::cout << "error: unterminated /* comment" << std::endl;
+                        exit(EXIT_FAILURE);
+                    }
+                    else if (c_peek ==  '\n') {
+                        std::cout << "comment at: " << c_lineno  + 1 << std::endl; // ====
+                        ++c_lineno;
+                        ++c_comment_lines;
+                    }
+
+                    next_ch();
+                    if (c_peek == '*') {
+                        next_ch();
+                        if (c_peek ==  '/') {
+                            next_ch();
+                            if (c_peek == '\n') {
+                                ++c_comment_lines;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (c_peek == '/') {
+                std::cout << "comment at: " << c_lineno  + 1 << std::endl; // ====
+                ++c_comment_lines;
+                while (c_peek != '\n') {
+                    next_ch();
+                }
+            }
+            else {
+                std::cout << "exec here" << std::endl; // ====
+                return std::make_unique<Token>(Tag::T_DIV);
+            }
+            //std::cout << c_peek << std::endl;
+            assert(c_peek != '/'); // ====
+            assert(c_peek == '\n'); // ====
+            //exit(EXIT_FAILURE); // ====
+            continue;
+        }
+
+        break;
     }
-
-
-    //std::cout << "char " << c_peek << " line: " << c_lineno << std::endl; // ====
-
-    em = false;
+    //std::cout << c_peek << std::endl; // ====
+    //exit(EXIT_FAILURE); // ====
 
     switch (c_peek) {
         case EOF:

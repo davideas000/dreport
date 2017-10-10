@@ -12,7 +12,6 @@
  * \copyright GNU Public License.
  */
 
-#include "console_colors/console_colors.hpp"
 #include "parsers/parsers.h"
 
 #include <iostream>
@@ -21,7 +20,7 @@
 
 using namespace std;
 using namespace boost::filesystem;
-using namespace console_colors;
+//using namespace console_colors;
 using namespace dreport;
 
 int main( int argc, char **argv )
@@ -98,3 +97,4 @@ int main( int argc, char **argv )
 
     return 0;
 }
+
