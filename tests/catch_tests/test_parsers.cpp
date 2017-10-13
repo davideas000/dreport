@@ -6,7 +6,8 @@ TEST_CASE("parsing cpp files") {
     using namespace std;
     using namespace dreport;
 
-    SECTION("get metrics of file_1.cpp") {
+    SECTION("getting metrics of file_1.cpp") {
+        // metrics: number fo lines, number of empty lines and number of comment lines
 
         string extras_path = "files/file_1.cpp";
 
@@ -25,7 +26,8 @@ TEST_CASE("parsing cpp files") {
 
     }
 
-    SECTION("get metrics of file_2.cpp") {
+    SECTION("getting metrics of file_2.cpp") {
+        // metrics: number fo lines, number of empty lines and number of comment lines
 
         string extras_path = "files/file_2.cpp";
 
@@ -44,5 +46,50 @@ TEST_CASE("parsing cpp files") {
 
     }
 
+    SECTION("teting lexer next_token function ") {
+
+        string extras_path = "files/file_2.cpp";
+        CppLexer lex{extras_path};
+
+        unique_ptr<Token> tk = lex.next_token();
+
+        REQUIRE(tk->tag() == Tag::T_UNK);
+        TokenWord* tw = dynamic_cast<TokenWord*>(tk.get());
+        REQUIRE(tw->lexeme() == "#");
+
+        tk = lex.next_token();
+        REQUIRE(tk->tag() == Tag::T_ID);
+        tw = dynamic_cast<TokenWord*>(tk.get());
+        REQUIRE(tw->lexeme() == "include");
+
+        tk = lex.next_token();
+        REQUIRE(tk->tag() == Tag::T_UNK);
+        tw = dynamic_cast<TokenWord*>(tk.get());
+        REQUIRE(tw->lexeme() == "\"");
+
+        tk = lex.next_token();
+        REQUIRE(tk->tag() == Tag::T_ID);
+        tw = dynamic_cast<TokenWord*>(tk.get());
+        REQUIRE(tw->lexeme() == "parsers");
+
+        tk = lex.next_token();
+        REQUIRE(tk->tag() == Tag::T_DIV);
+
+        tk = lex.next_token();
+        REQUIRE(tk->tag() == Tag::T_ID);
+        tw = dynamic_cast<TokenWord*>(tk.get());
+        REQUIRE(tw->lexeme() == "parsers");
+
+        tk = lex.next_token();
+        REQUIRE(tk->tag() == Tag::T_UNK);
+        tw = dynamic_cast<TokenWord*>(tk.get());
+        REQUIRE(tw->lexeme() == ".");
+
+        tk = lex.next_token();
+        REQUIRE(tk->tag() == Tag::T_ID);
+        tw = dynamic_cast<TokenWord*>(tk.get());
+        REQUIRE(tw->lexeme() == "h");
+
+    }
 
 }

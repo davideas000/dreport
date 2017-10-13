@@ -11,58 +11,64 @@ namespace dreport {
 
     class Token {
 
-        friend std::ostream& operator<<(std::ostream& os, Token* tk);
         public:
-        explicit Token(Tag tag);
-        Token(const Token& tk) = delete;
-        virtual ~Token();
-        virtual Tag tag() const;
+            explicit Token(Tag tag);
+            Token(const Token& tk) = delete;
+            virtual ~Token();
+            virtual Tag tag() const;
+
+            friend std::ostream& operator<<(std::ostream& os, Token* tk);
 
         protected:
-        //private:
-        Tag t_tag;
+            Tag t_tag;
+
     };
 
     class TokenWord : public Token {
 
-        friend std::ostream& operator<<(std::ostream& os, Token* tk);
-        //friend std::ostream& operator<<(std::ostream& os, const Token* tk);
-        //friend std::ostream& operator<<(std::ostream& os, const TokenWord* tk);
-        //friend std::ostream& operator<<(std::ostream& os, const TokenWord& tk);
 
         public:
-        TokenWord(Tag tag, const std::string& lexeme); 
-        virtual ~TokenWord();
-        TokenWord(const TokenWord& tk) = delete;
-        virtual std::string lexeme() const;
+
+            TokenWord(Tag tag, const std::string& lexeme); 
+            virtual ~TokenWord();
+            TokenWord(const TokenWord& tk) = delete;
+            virtual std::string lexeme() const;
+
+            friend std::ostream& operator<<(std::ostream& os, Token* tk);
 
         private:
-        std::string t_lexeme;
+            std::string t_lexeme;
+
     };
 
     class CppLexer {
 
-        static const unsigned int BUFFER_SIZE = 8192;
-
         public:
-        explicit CppLexer(const std::string& filename);
-        virtual ~CppLexer();
-        std::unique_ptr<Token> next_token();
-        void next_ch();
-        unsigned int lineno() const;
-        unsigned int empty_lines() const;
-        unsigned int comment_lines() const;
+            explicit CppLexer(const std::string& filename);
+            virtual ~CppLexer();
+            std::unique_ptr<Token> next_token();
+            unsigned int lineno() const;
+            unsigned int empty_lines() const;
+            unsigned int comment_lines() const;
 
         private:
-        std::ifstream c_file;
-        char c_buffer[BUFFER_SIZE];
-        char c_peek;
-        unsigned int c_lineno;
-        unsigned int c_empty_lines;
-        unsigned int c_comment_lines;
-        unsigned int buffer_pos;
-        unsigned int empty_line_flag;
 
+            static const unsigned int BUFFER_SIZE = 8192;
+
+            std::ifstream c_file;
+            char c_buffer[BUFFER_SIZE];
+            char c_peek;
+            unsigned int c_lineno;
+            unsigned int c_empty_lines;
+            unsigned int c_comment_lines;
+            unsigned int buffer_pos;
+
+            // used to detect empty lines and to detect lines that are 
+            // true comment lines and not a comment in the end of a code line
+            unsigned int empty_line_flag; 
+
+            //utility functions
+            void next_ch();
     };
 
     class CppParser {

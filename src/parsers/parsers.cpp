@@ -75,8 +75,8 @@ std::string dreport::TokenWord::lexeme() const {
 
 dreport::CppLexer::CppLexer(const std::string& filename) 
     : c_file(filename), c_peek(' '), c_lineno(0),
-      c_empty_lines(0), c_comment_lines(0), buffer_pos(0), 
-      empty_line_flag(true)
+    c_empty_lines(0), c_comment_lines(0), buffer_pos(0), 
+    empty_line_flag(true)
 {
     c_file.read(c_buffer, BUFFER_SIZE - 1);
     if (c_file.eof()) {
@@ -91,11 +91,8 @@ dreport::CppLexer:: ~CppLexer() {}
 std::unique_ptr<dreport::Token> dreport::CppLexer::next_token() {
 
     while (true) {
-        //static bool em = true;
 
         if (isspace(c_peek)) {
-
-            //std::cout << "Enter here" << std::endl; // ====
 
             while (isspace(c_peek)) {
                 if (c_peek == '\n') {
@@ -110,8 +107,6 @@ std::unique_ptr<dreport::Token> dreport::CppLexer::next_token() {
 
         }
 
-        //em = false; // ====
-
         if (c_peek == '/') {
             next_ch();
             if (c_peek == '*') {
@@ -123,12 +118,9 @@ std::unique_ptr<dreport::Token> dreport::CppLexer::next_token() {
                     }
                     else if (c_peek ==  '\n') {
                         ++c_lineno;
-                        std::cout << "new line -block commnet- " <<  c_lineno << std::endl; // ====
-                        if (empty_line_flag) { // FIXME
-                            std::cout << "new line -block commnet- " <<  c_lineno << std::endl; // ====
+                        if (empty_line_flag) {
                             ++c_comment_lines;
                         }
-                        //assert(empty_line_flag == true); // ====
                     }
 
                     next_ch();
@@ -136,83 +128,83 @@ std::unique_ptr<dreport::Token> dreport::CppLexer::next_token() {
                         next_ch();
                         if (c_peek ==  '/') {
                             next_ch();
-                            //if (c_peek == '\n') {
-                            if (c_peek == '\n' && empty_line_flag) { // FIXME
-                                std::cout << "new line -block commnet end- " <<  c_lineno << std::endl; // ====
+                            // empty_line_flag is used to detect empty lines and to detect lines that are 
+                            // true comment lines and not a comment in the end of a code line
+                            if (c_peek == '\n' && empty_line_flag) {
                                 ++c_comment_lines;
                             }
                             break;
                         }
-                        }
+                    }
 
-                    }
                 }
-                else if (c_peek == '/') {
-                    if (empty_line_flag) { // FIXME
-                        std::cout << "normal comment new line " << c_lineno + 1 << std::endl; // ====
-                        ++c_comment_lines;
-                    }
-                    while (c_peek != '\n') {
-                        next_ch();
-                    }
-                }
-                else {
-                    return std::make_unique<Token>(Tag::T_DIV);
-                }
-                empty_line_flag = false; // ====
-                continue;
             }
+            else if (c_peek == '/') {
+                // empty_line_flag is used to detect empty lines and to detect lines that are 
+                // true comment lines and not a comment in the end of a code line
+                if (empty_line_flag) {
+                    ++c_comment_lines;
+                }
+                while (c_peek != '\n') {
+                    next_ch();
+                }
+            }
+            else {
+                return std::make_unique<Token>(Tag::T_DIV);
+            }
+            empty_line_flag = false;
+            continue;
+        }
 
-            empty_line_flag = false; // ====
+        empty_line_flag = false;
+        break;
+    }
+
+    switch (c_peek) {
+        case EOF:
+            return std::make_unique<Token>(Tag::T_EOF);
             break;
-        }
-
-        switch (c_peek) {
-            case EOF:
-                return std::make_unique<Token>(Tag::T_EOF);
-                break;
-            default:
-                std::stringstream ss;
-                if (isalpha(c_peek)) {
-                    while (isalpha(c_peek) || isdigit(c_peek) || c_peek == '_') {
-                        ss << c_peek; 
-                        next_ch();
-                    }
-                    return std::make_unique<TokenWord>(Tag::T_ID, ss.str());
+        default:
+            std::stringstream ss;
+            if (isalpha(c_peek)) {
+                while (isalpha(c_peek) || isdigit(c_peek) || c_peek == '_') {
+                    ss << c_peek; 
+                    next_ch();
                 }
-                else if (isdigit(c_peek)) {
-                    while (isdigit(c_peek)) {
-                        ss << c_peek;
-                        next_ch();
-                    }
-                    return std::make_unique<TokenWord>(Tag::T_NUM, ss.str());
+                return std::make_unique<TokenWord>(Tag::T_ID, ss.str());
+            }
+            else if (isdigit(c_peek)) {
+                while (isdigit(c_peek)) {
+                    ss << c_peek;
+                    next_ch();
                 }
-        }
-
-        auto tk =  std::make_unique<TokenWord>(Tag::T_UNK, std::string{c_peek});
-        next_ch();
-        return tk;
+                return std::make_unique<TokenWord>(Tag::T_NUM, ss.str());
+            }
     }
 
-    void dreport::CppLexer::next_ch() {
-        //static unsigned int buffer_pos = 0; // ====
+    auto tk =  std::make_unique<TokenWord>(Tag::T_UNK, std::string{c_peek});
+    next_ch();
+    return tk;
+}
 
-        if (buffer_pos < BUFFER_SIZE) {
-            c_peek = c_buffer[buffer_pos++];
-        }
-        else {
-            c_peek = EOF;
-        }
-    }
+void dreport::CppLexer::next_ch() {
 
-    unsigned int dreport::CppLexer::lineno() const {
-        return c_lineno;
+    if (buffer_pos < BUFFER_SIZE) {
+        c_peek = c_buffer[buffer_pos++];
     }
+    else {
+        c_peek = EOF;
+    }
+}
 
-    unsigned int dreport::CppLexer::empty_lines() const {
-        return c_empty_lines;
-    }
+unsigned int dreport::CppLexer::lineno() const {
+    return c_lineno;
+}
 
-    unsigned int dreport::CppLexer::comment_lines() const {
-        return c_comment_lines;
-    }
+unsigned int dreport::CppLexer::empty_lines() const {
+    return c_empty_lines;
+}
+
+unsigned int dreport::CppLexer::comment_lines() const {
+    return c_comment_lines;
+}

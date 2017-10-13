@@ -11,7 +11,7 @@
  * \copyright GNU Public License.
  */
 
-#include "parsers/parsers.h"
+#include "parsers/parsers.h"  /*not a comment line*/
 
 #include <iostream>
 #include <iomanip>
@@ -89,7 +89,7 @@ int main( int argc, char **argv )
             lex.next_token();
 
             auto files_metrics = make_tuple(entry, lex.lineno(), lex.empty_lines(), 
-                    lex.comment_lines());
+                    lex.comment_lines()); /*not a comment line*/
 
             total_lines += lex.lineno();
             total_empty_lines += lex.empty_lines();

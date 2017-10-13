@@ -29,16 +29,19 @@ int main(int argc, char const* argv[])
     regex re{R"((.*?/)\w+$)"};
     smatch m;
 
-    std::cout 
-        << boolalpha << regex_match(string(argv[0]), m, re)
-        << "\nsize: " << m.size()
-        << "\nresult: " << m[1]
-        << std::endl;
+    regex_match(string(argv[0]), m, re);
 
-    string entry = m[1].str() + "files/file_1.cpp";
+    //std::cout 
+    //<< boolalpha << regex_match(string(argv[0]), m, re)
+    //<< "\nsize: " << m.size()
+    //<< "\nresult: " << m[1]
+    //<< std::endl;
+
+    string entry = m[1].str() + "files/file_2.cpp";
     CppLexer lex{entry};
     unique_ptr<Token> tk = lex.next_token();
     while (tk->tag() != Tag::T_EOF) {
+        std::cout << tk.get() << std::endl;
         tk = lex.next_token();
     }
 
