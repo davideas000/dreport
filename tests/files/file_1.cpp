@@ -13,7 +13,7 @@ int main(int argc, char const* argv[])
     std::cout 
         << boolalpha << regex_match(string(argv[0]), m, re)
         << "\nsize: " << m.size()
-        << "\nresult: " << m[1]
+        << "\nresult: " << m[1]  // not a comment line
     << std::endl;
     /*for (int i = strlen(argv[0]) - 1; i > 0; --i) {
     std::cout << argv[0][i] << std::endl;

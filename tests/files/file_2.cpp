@@ -24,6 +24,7 @@ using namespace dreport;
 int main( int argc, char **argv )
 {
 
+
     path p = ".";
     if (argc > 1) {
         p = argv[1];
@@ -43,9 +44,9 @@ int main( int argc, char **argv )
     unsigned int total_empty_lines = 0;
     unsigned int total_comment_lines = 0;
 
-    std::cout << "path: " << p << ", size: " << p.size() << std::endl;
+    std::cout << "path: " << p << "size: " << p.size() << std::endl;
 
-    vector< tuple<string, int, int, int> > file_metrics;
+    vector< tuple<string, int, int, int> > file_metrics; /*comment not a commet line*/
 
     for (auto& entry : it) {
 
@@ -57,6 +58,7 @@ int main( int argc, char **argv )
         //if (it.level() == 10 || entry.path().string()[0] == '.') {
         //it.pop();
         //}
+
 
         //std::cout << entry << std::endl; // ====
 
