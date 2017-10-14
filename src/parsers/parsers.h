@@ -54,12 +54,12 @@ namespace dreport {
 
             static const unsigned int BUFFER_SIZE = 8192;
 
-            std::ifstream c_file;
-            char c_buffer[BUFFER_SIZE];
-            char c_peek;
-            unsigned int c_lineno;
-            unsigned int c_empty_lines;
-            unsigned int c_comment_lines;
+            std::ifstream m_file;
+            char m_buffer[BUFFER_SIZE];
+            char m_peek;
+            unsigned int m_lineno;
+            unsigned int m_empty_lines;
+            unsigned int m_comment_lines;
             unsigned int buffer_pos;
 
             // used to detect empty lines and to detect lines that are 
