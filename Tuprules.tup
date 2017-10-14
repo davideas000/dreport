@@ -15,6 +15,7 @@ CFLAGS += -g
 
 #LIB_DIRS += -L$(TUP_CWD)/src/parsers
 
+LOCAL_LIBS += $(TUP_CWD)/src/report/lib$(PROJECT)_report.a
 LOCAL_LIBS += $(TUP_CWD)/src/parsers/lib$(PROJECT)_parsers.a
 
 # dependencies_libraries

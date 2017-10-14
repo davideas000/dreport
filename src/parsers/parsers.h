@@ -26,7 +26,6 @@ namespace dreport {
 
     class TokenWord : public Token {
 
-
         public:
 
             TokenWord(Tag tag, const std::string& lexeme); 
