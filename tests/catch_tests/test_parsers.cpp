@@ -1,15 +1,17 @@
 #include "parsers/parsers.h"
-#include <catch/catch.hpp>
+#include "catch.hpp"
 
 TEST_CASE("parsing cpp files") {
 
     using namespace std;
     using namespace dreport;
 
+    string path = "tests/files/";
+
     SECTION("getting metrics of file_1.cpp") {
         // metrics: number fo lines, number of empty lines and number of comment lines
 
-        string extras_path = "files/file_1.cpp";
+        string extras_path = path + "file_1.cpp";
 
         CppLexer lex{extras_path};
 
@@ -29,7 +31,7 @@ TEST_CASE("parsing cpp files") {
     SECTION("getting metrics of file_2.cpp") {
         // metrics: number fo lines, number of empty lines and number of comment lines
 
-        string extras_path = "files/file_2.cpp";
+        string extras_path = path + "file_2.cpp";
 
         CppLexer lex{extras_path};
 
@@ -48,7 +50,7 @@ TEST_CASE("parsing cpp files") {
 
     SECTION("teting lexer next_token function ") {
 
-        string extras_path = "files/file_2.cpp";
+        string extras_path = path + "file_2.cpp";
         CppLexer lex{extras_path};
 
         unique_ptr<Token> tk = lex.next_token();

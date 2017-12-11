@@ -7,10 +7,12 @@ INCLUDE_DIRS += -I$(TUP_CWD)/src
 #INCLUDE_DIRS += -I$(TUP_CWD)/lib
 INCLUDE_DIRS += -I/media/windows/Users/HP/Desktop/programming/cpp/git/Catch/include
 
-CFLAGS += -std=c++14 
+CFLAGS += -std=c++14
 CFLAGS += -Wall
+#CFLAGS += -Weverything
+CFLAGS += -fcolor-diagnostics
 CFLAGS += -g
-
+#CFLAGS += -Wno-c++98-compat
 #CFLAGS += -Os
 
 #LIB_DIRS += -L$(TUP_CWD)/src/parsers
