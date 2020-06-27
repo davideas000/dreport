@@ -8,8 +8,17 @@
 ///////////////////////////////////////
 
 dreport::Token::Token(Tag tag)
-: t_tag(tag)
+  : t_tag(tag)
 {
+  // specifiers
+  keywords.insert({"static", Tag::T_SPECIFIER});
+  keywords.insert({"virtual", Tag::T_SPECIFIER});
+  keywords.insert({"extern", Tag::T_SPECIFIER});
+
+  // types
+  keywords.insert({"int", Tag::T_SPECIFIER});
+  keywords.insert({"double", Tag::T_SPECIFIER});
+  keywords.insert({"float", Tag::T_SPECIFIER});
 }
 
 dreport::Token::~Token() {
@@ -24,19 +33,19 @@ std::ostream& dreport::operator<<(std::ostream& os, Token* tk) {
   os << "{" ;
 
   switch (tk->t_tag) {
-    case Tag::T_UNK:
+  case Tag::T_UNK:
     os << "T_UNK";
     break;
-    case Tag::T_ID:
+  case Tag::T_ID:
     os << "T_ID";
     break;
-    case Tag::T_EOF:
+  case Tag::T_EOF:
     os << "T_EOF";
     break;
-    case Tag::T_NUM:
+  case Tag::T_NUM:
     os << "T_NUM";
     break;
-    case Tag::T_DIV:
+  case Tag::T_DIV:
     os << "T_DIV";
     break;
   }
@@ -56,7 +65,7 @@ std::ostream& dreport::operator<<(std::ostream& os, Token* tk) {
 ///////////////////////////////////////
 
 dreport::TokenWord::TokenWord(Tag tag, const std::string& lexeme)
-: Token(tag), t_lexeme(lexeme)
+  : Token(tag), t_lexeme(lexeme)
 {
 }
 
@@ -72,9 +81,9 @@ std::string dreport::TokenWord::lexeme() const {
 ///////////////////////////////////////
 
 dreport::CppLexer::CppLexer(const std::string& filename)
-: m_file(filename), m_peek(' '), m_lineno(0),
-m_empty_lines(0), m_comment_lines(0), buffer_pos(0),
-empty_line_flag(true)
+  : m_file(filename), m_peek(' '), m_lineno(0),
+    m_empty_lines(0), m_comment_lines(0), buffer_pos(0),
+    empty_line_flag(true)
 {
   m_file.read(m_buffer, BUFFER_SIZE - 1);
   if (m_file.eof()) {
@@ -159,10 +168,10 @@ std::unique_ptr<dreport::Token> dreport::CppLexer::next_token() {
   }
 
   switch (m_peek) {
-    case EOF:
+  case EOF:
     return std::make_unique<Token>(Tag::T_EOF);
     break;
-    default:
+  default:
     std::stringstream ss;
     if (isalpha(m_peek)) {
       while (isalpha(m_peek) || isdigit(m_peek) || m_peek == '_') {

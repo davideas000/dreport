@@ -4,10 +4,11 @@
 #include <string>
 #include <fstream>
 #include <memory>
+#include <unordered_map>
 
 namespace dreport {
 
-  enum class Tag { T_NUM, T_ID, T_DIV, T_UNK, T_EOF };
+  enum class Tag { T_NUM, T_ID, T_SPECIFIER, T_TYPE, T_DIV, T_UNK, T_EOF };
 
   class Token {
 
@@ -21,6 +22,7 @@ namespace dreport {
 
   protected:
     Tag t_tag;
+    std::unordered_map<std::string, Tag> keywords;
 
   };
 

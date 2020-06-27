@@ -23,7 +23,6 @@ total_comment_lines(0)
 
 void Report::run(const boost::filesystem::path &p) {
   boost::filesystem::recursive_directory_iterator it(p);
-  // std::cout << "running tests -- " << p << '\n'; // ====
 
   for (auto& entry : it) {
 
